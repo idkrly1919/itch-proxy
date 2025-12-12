@@ -21,6 +21,15 @@ export class ProxyManager {
     isProxyOpen: boolean = $state(false);
     url: string = $state("");
     iframeUrl: string = $state("");
+    
+    // Properties required by App.svelte UI but effectively unused for Scramjet
+    proxyUrl: string = $state("");
+    
+    // Stub method required by App.svelte
+    setProxyServer(url: string) {
+        this.proxyUrl = url;
+        // Scramjet configuration is handled in initializeProxy
+    }
 
     async initializeProxy() {
         const wispUrl = (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/wisp/";
