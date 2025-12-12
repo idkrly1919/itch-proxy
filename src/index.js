@@ -35,11 +35,13 @@ const fastify = Fastify({
 	},
 });
 
+// Serve the Svelte app and its assets
 fastify.register(fastifyStatic, {
 	root: distPath,
 	decorateReply: true,
 });
 
+// Serve proxy-related libraries
 fastify.register(fastifyStatic, {
 	root: scramjetPath,
 	prefix: "/scram/",
@@ -58,9 +60,10 @@ fastify.register(fastifyStatic, {
 	decorateReply: false,
 });
 
-fastify.setNotFoundHandler((res, reply) => {
-	// Send the main index.html for any unhandled routes, for client-side routing.
-	return reply.code(200).type("text/html").sendFile("index.html");
+// Handle all GET requests that are not for static assets.
+// This is the standard way to serve a Single Page Application (SPA).
+fastify.setNotFoundHandler((req, reply) => {
+	return reply.sendFile("index.html");
 });
 
 fastify.server.on("listening", () => {
